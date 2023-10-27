@@ -1,20 +1,24 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React from "react";
 import Rating from "../components/ui/Rating";
 import Price from "../components/ui/Price";
 import { useParams } from "react-router-dom";
 import Book from "../components/ui/Book";
+import { Link } from "react-router-dom";
 
 
 
-const BookInfo = ({books, addToCart}) => {
+const BookInfo = ({books, addToCart, cart}) => {
     const {id} = useParams()
     const book = books.find(book => +book.id === +id)
-    const [added, setAdded] = useState(false)
+  
 
     function addBookToCart(book) {
-        setAdded(true)
         addToCart(book)
+    }
+
+    function bookExistsCart() {
+        return cart.find((book) => book.id === +id)
     }
   
     return (
@@ -23,12 +27,12 @@ const BookInfo = ({books, addToCart}) => {
                 <div className="books__container">
                     <div className="row">
                         <div className="book__selected--top">
-                            <a href='/books' className='book__link'>
+                            <Link to={'/books'} className='book__link'>
                                 <FontAwesomeIcon icon='arrow-left' />
-                            </a>
-                            <a href="/books" className="book__link">
+                            </Link>
+                            <Link to={"/books"} className="book__link">
                                 <h2 className="book__selected--title--top">Books</h2>
-                            </a>
+                            </Link>
                         </div>
                         <div className="book__selected">
                             <figure className="book__selected--figure">
@@ -53,10 +57,10 @@ const BookInfo = ({books, addToCart}) => {
                                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab vel rem fuga animi laboriosam hic ex amet molestiae dicta consequuntur.
                                 </p>
                             </div>
-                            {added ? (
-                                <a href="/cart" >
+                            {bookExistsCart() ? (
+                                <Link to={`/cart`} >
                                     <button className="btn">Checout</button>
-                                </a>
+                                </Link>
                             ) : (
                             <button className="btn" onClick={() => addBookToCart(book)}>
                                 Add to cart
